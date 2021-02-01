@@ -8,6 +8,115 @@ public class Assignments {
 
     }
 }
+class assignment24{
+    public static void main(String[] args) {
+        Apparel cotton = new Cotton(1005.00);
+        Silk silk = new Silk(12000.00);
+        cotton.calculatePrice();
+        silk.calculatePrice();
+        System.out.println(cotton);
+        System.out.println(silk);
+    }
+}
+
+class Apparel{
+    private String itemId;
+    private double price;
+    private String itemType;
+    public  static int counter = 100;
+
+    @Override
+    public String toString() {
+        return "Apparel{" +
+                "itemId='" + itemId + '\'' +
+                ", price=" + price +
+                ", itemType='" + itemType + '\'' +
+                '}';
+    }
+
+    public Apparel(double price, String itemType) {
+        counter++;
+        if(itemType.equals("Cotton")){
+            this.itemId = "C" + counter;
+        }else{
+            this.itemId = "S" + counter;
+        }
+
+        this.price = price;
+        this.itemType = itemType;
+    }
+    void calculatePrice(){
+        this.price  = this.price* 1.05;
+
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+
+class Cotton extends Apparel{
+    private double discount;
+
+    public Cotton(double price) {
+        super(price, "Cotton");
+    }
+
+    @Override
+    void calculatePrice() {
+        super.calculatePrice();
+        double finalPrice = (super.getPrice() * (1 - discount/100)) * 1.05;
+        super.setPrice(finalPrice);
+
+
+    }
+
+
+
+    public double getDiscount() {
+        return discount;
+    }
+}
+
+class Silk extends Apparel{
+    private int points;
+
+    public Silk(double price) {
+        super(price, "Silk");
+    }
+
+    @Override
+    void calculatePrice() {
+        super.calculatePrice();//service tax
+        if (super.getPrice() > 10000){
+            this.points = 10;
+        }else{
+            this.points = 3;
+        }
+        super.setPrice(super.getPrice() * 1.05);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "points :" + points;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+}
 
 class Assignment22{
     public static void main(String[] args) {
