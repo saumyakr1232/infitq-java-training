@@ -8,6 +8,110 @@ public class Assignments {
 
     }
 }
+
+
+class Assignment25{
+    public static void main(String[] args) {
+
+        Customer customer = new Customer("Saumya", "wholesale");
+        Customer customer1 = new Customer("Gaurav", "retail");
+        Purchase p = new Purchase(customer, "Apple", 10);
+        System.out.println(p.claculatePrice());;
+        Purchase p1 = new Purchase(customer1, "Orange", 2);
+        System.out.println(p1.claculatePrice());
+
+    }
+}
+
+class FruitInfo{
+    private static ArrayList<String> fruitNameList =
+            new ArrayList<>(Arrays.asList("Apple", "Guava", "Orange", "Grape", "Sweet Lime"));
+    private static ArrayList<Integer> fruitPriceList =
+            new ArrayList<>(Arrays.asList(200, 80, 70, 110, 60));
+
+    public static ArrayList<Integer> getFruitPriceList() {
+        return fruitPriceList;
+    }
+
+    public static ArrayList<String> getFruitNameList() {
+        return fruitNameList;
+    }
+
+    public static int getFruitPrice(String fruitName){
+        if (fruitNameList.contains(fruitName)){
+            return fruitPriceList.get(fruitNameList.indexOf(fruitName));
+        }else{
+            return -1;
+        }
+
+    }
+}
+class Customer{
+    private String customerName;
+    private String customerType;
+
+    public Customer(String customerName, String customerType) {
+        this.customerName = customerName;
+        this.customerType = customerType;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public String getCustomerType() {
+        return customerType;
+    }
+}
+
+class Purchase{
+    private String purchaseId;
+    private Customer customer;
+    private String fruitName;
+    private int quantity;
+    private static  int counter = 101;
+
+    public Purchase(Customer customer, String fruitName, int quantity) {
+        this.customer = customer;
+        this.fruitName = fruitName;
+        this.quantity = quantity;
+    }
+
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public String getFruitName() {
+        return fruitName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+    public double claculatePrice(){
+        if (FruitInfo.getFruitNameList().contains(fruitName)){
+            double totalPrice = FruitInfo.getFruitPrice(fruitName) * quantity;
+            if(Collections.max(FruitInfo.getFruitPriceList()) == FruitInfo.getFruitPrice(fruitName)
+            && quantity > 1){
+                totalPrice = totalPrice * 0.98;
+            }else if(Collections.min(FruitInfo.getFruitPriceList()) == FruitInfo.getFruitPrice(fruitName)
+            && quantity >= 5){
+                totalPrice = totalPrice * 0.95;
+            }
+            if(customer.getCustomerType().equals("wholesale")){
+                totalPrice = totalPrice * 0.90;
+            }
+
+            purchaseId = "P"+ counter++;
+
+            return totalPrice;
+        }
+
+        return -1.0;
+    }
+}
+
 class assignment24{
     public static void main(String[] args) {
         Apparel cotton = new Cotton(1005.00);
@@ -433,101 +537,101 @@ class Ticket{
         return destination;
     }
 }
-class Assignment18{
-    public static void main(String[] args) {
-        Customer customer = new Customer("Saumya");
-        Item milk = new Item(2332,"Milk", 30.0);
-        Item bread = new Item(2333, "Bread", 25.0);
-
-        HashMap<Integer, Integer> item_quantity = new HashMap<>();
-        item_quantity.put(2332, 20);
-        item_quantity.put(2333, 10);
-
-        ArrayList<Item> items = new ArrayList<>();
-        items.add(milk);
-        items.add(bread);
-
-        Bill bill = new Bill();
-        bill.generateBillAmount(item_quantity, items);
-        customer.paysBill(bill);
-
-        Bill bill1 = new Bill();
-        item_quantity.remove(2332);
-        bill1.generateBillAmount(item_quantity, items);
-        customer.paysBill(bill1);
-    }
-}
-class Customer{
-    private String customerName;
-    private String paymentStatus;
-
-    public Customer(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public void paysBill(Bill bill){
-        paymentStatus = "Paid";
-        System.out.println("Customer Name :"+ customerName + "\nBill Id: "+ bill.getBillId()
-                + "\nBill Amount: "+ bill.getBillAmount());
-
-    }
-}
-class Bill{
-    private String billId;
-    private double billAmount;
-    public static int counter = 1000;
-
-    public Bill() {
-    }
-    public void generateBillAmount(HashMap<Integer, Integer> itemQuantity, ArrayList<Item> items){
-        billId = "B" + counter;
-        double total = 0;
-        for (Integer itemId : itemQuantity.keySet()){
-            for (Item item : items){
-                if(item.getItemId() == itemId){
-                    total += itemQuantity.get(itemId) *item.getPricePerQuantity();
-
-                }
-
-            }
-
-        }
-        billAmount = total;
-
-    }
-
-    public double getBillAmount() {
-        return billAmount;
-    }
-
-    public String getBillId() {
-        return billId;
-    }
-}
-
-class Item{
-    private int itemId;
-    private String description;
-    private double pricePerQuantity;
-
-    public Item(int itemId, String description, double pricePerQuantity) {
-        this.itemId = itemId;
-        this.description = description;
-        this.pricePerQuantity = pricePerQuantity;
-    }
-
-    public int getItemId() {
-        return itemId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public double getPricePerQuantity() {
-        return pricePerQuantity;
-    }
-}
+//class Assignment18{
+//    public static void main(String[] args) {
+//        Customer customer = new Customer("Saumya");
+//        Item milk = new Item(2332,"Milk", 30.0);
+//        Item bread = new Item(2333, "Bread", 25.0);
+//
+//        HashMap<Integer, Integer> item_quantity = new HashMap<>();
+//        item_quantity.put(2332, 20);
+//        item_quantity.put(2333, 10);
+//
+//        ArrayList<Item> items = new ArrayList<>();
+//        items.add(milk);
+//        items.add(bread);
+//
+//        Bill bill = new Bill();
+//        bill.generateBillAmount(item_quantity, items);
+//        customer.paysBill(bill);
+//
+//        Bill bill1 = new Bill();
+//        item_quantity.remove(2332);
+//        bill1.generateBillAmount(item_quantity, items);
+//        customer.paysBill(bill1);
+//    }
+//}
+//class Customer{
+//    private String customerName;
+//    private String paymentStatus;
+//
+//    public Customer(String customerName) {
+//        this.customerName = customerName;
+//    }
+//
+//    public void paysBill(Bill bill){
+//        paymentStatus = "Paid";
+//        System.out.println("Customer Name :"+ customerName + "\nBill Id: "+ bill.getBillId()
+//                + "\nBill Amount: "+ bill.getBillAmount());
+//
+//    }
+//}
+//class Bill{
+//    private String billId;
+//    private double billAmount;
+//    public static int counter = 1000;
+//
+//    public Bill() {
+//    }
+//    public void generateBillAmount(HashMap<Integer, Integer> itemQuantity, ArrayList<Item> items){
+//        billId = "B" + counter;
+//        double total = 0;
+//        for (Integer itemId : itemQuantity.keySet()){
+//            for (Item item : items){
+//                if(item.getItemId() == itemId){
+//                    total += itemQuantity.get(itemId) *item.getPricePerQuantity();
+//
+//                }
+//
+//            }
+//
+//        }
+//        billAmount = total;
+//
+//    }
+//
+//    public double getBillAmount() {
+//        return billAmount;
+//    }
+//
+//    public String getBillId() {
+//        return billId;
+//    }
+//}
+//
+//class Item{
+//    private int itemId;
+//    private String description;
+//    private double pricePerQuantity;
+//
+//    public Item(int itemId, String description, double pricePerQuantity) {
+//        this.itemId = itemId;
+//        this.description = description;
+//        this.pricePerQuantity = pricePerQuantity;
+//    }
+//
+//    public int getItemId() {
+//        return itemId;
+//    }
+//
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public double getPricePerQuantity() {
+//        return pricePerQuantity;
+//    }
+//}
 
 //
 //class Assignment17{
