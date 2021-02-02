@@ -9,168 +9,292 @@ public class Assignments {
     }
 }
 
-class Assignment27{
+
+
+
+class Assignment29{
     public static void main(String[] args) {
+        Customer regularCustomer = new RegularCustomer("Saumya", 5);
+        Customer oCustomer = new OccasionalCustomer("Lalu", 3);
 
-        Customer customer = new Customer("Boss",
-                new ArrayList<>(Arrays.asList("Game1", "Game3", "Game4")));
+        System.out.println(regularCustomer.calculateBillAmount());
+        System.out.println(oCustomer.calculateBillAmount());
 
-        System.out.println(customer.bookTicket());
-        System.out.println(customer);
+        System.out.println("Regular Customer: -" + regularCustomer);
+        System.out.println("Occasional customer: -"+ oCustomer);
 
     }
 }
 
-class ThemePark{
-    public static HashMap<String, ArrayList<Double>> dictOfGames =
-            new HashMap<>();
-    static{
-        dictOfGames.put("Game1",new ArrayList<>(Arrays.asList(35.5,5.0)));
-        dictOfGames.put("Game2", new ArrayList<>(Arrays.asList(40.0, 6.0)));
-        dictOfGames.put("Game3", new ArrayList<>(Arrays.asList(120.0, 10.0)));
-        dictOfGames.put("Game4", new ArrayList<>(Arrays.asList(60.0, 7.0)));
-        dictOfGames.put("Game5", new ArrayList<>(Arrays.asList(25.0, 4.0)));
+abstract class Customer{
+    private String customerName;
+    public double billAmount;
+    public String billId;
 
+    public Customer(String customerName) {
+        this.customerName = customerName;
     }
 
-    public static boolean validateGame(String gameInput){
-        return dictOfGames.containsKey(gameInput);
+
+    abstract double calculateBillAmount();
+
+    public String getCustomerName() {
+        return customerName;
     }
-
-    public static int getPoints(String gameInput){
-        return (int)(double)dictOfGames.get(gameInput).get(1);
-    }
-
-    public static double getAmount(String gameInput){
-        return dictOfGames.get(gameInput).get(0);
-    }
-}
-
-class Ticket{
-    private static int ticketCount = 200;
-    private Integer ticketId;
-    private double ticketAmount;
-
-    public Ticket() {
-        this.ticketAmount = 0;
-        this.ticketId = null;
-    }
-
-    public void generateTicketId(){
-        ticketId = ++ticketCount;
-
-    }
-
-    public boolean calculateAmount(ArrayList<String> listOfGames){
-        double totalTicketAmount=0;
-        for (String  game : listOfGames){
-            if(!ThemePark.validateGame(game)){
-                return false;
-            }else{
-                totalTicketAmount += ThemePark.getAmount(game);
-            }
-        }
-        ticketAmount = totalTicketAmount;
-        return true;
-
-    }
-
-    public double getTicketAmount() {
-        return ticketAmount;
-    }
-
-    public Integer getTicketId() {
-        return ticketId;
-    }
-
-    @Override
-    public String toString() {
-        return "Ticket{" +
-                "ticketId=" + ticketId +
-                ", ticketAmount=" + ticketAmount +
-                '}';
-    }
-}
-
-class Customer{
-    private String name;
-    private ArrayList<String> gameList;
-    private Ticket ticket;
-    private int pointsEarned;
-    private String foodCoupon;
 
     @Override
     public String toString() {
         return "Customer{" +
-                "name='" + name + '\'' +
-                ", gameList=" + gameList + "\n"+
-                ", ticket=" + ticket +  "\n"+
-                ", pointsEarned=" + pointsEarned +
-                ", foodCoupon='" + foodCoupon + '\'' +
+                "customerName='" + customerName + '\'' +
+                ", billAmount=" + billAmount +
+                ", billId='" + billId + '\'' +
+                '}';
+    }
+}
+
+class OccasionalCustomer extends  Customer{
+    private double distanceInKms;
+    private static int counter = 1000;
+
+
+    public OccasionalCustomer(String customerName, int distanceInKms) {
+        super(customerName);
+        super.billId = "O" + ++counter;
+        this.distanceInKms = distanceInKms;
+    }
+
+    public boolean validateDistanceInKms(){
+        return  (distanceInKms >=1 && distanceInKms <= 5);
+    }
+
+    public double getDistanceInKms() {
+        return distanceInKms;
+    }
+
+    @Override
+    double calculateBillAmount() {
+        if(validateDistanceInKms()){
+
+            super.billAmount = ((distanceInKms) * (distanceInKms<=2 ? 5 : 7.5)) + 50;
+            return super.billAmount;
+        }else{
+            return -1.0;
+        }
+
+    }
+
+    @Override
+    public String toString() {
+        return "OccasionalCustomer{" +
+                "billAmount=" + billAmount +
+                ", billId='" + billId + '\'' +
+                ", distanceInKms=" + distanceInKms +
+                '}';
+    }
+}
+
+class RegularCustomer extends Customer{
+    private int noOfTiffins;
+    static private int counter = 100;
+
+    @Override
+    public String toString() {
+        return "RegularCustomer{" +
+                "billAmount=" + billAmount +
+                ", billId='" + billId + '\'' +
+                ", noOfTiffins=" + noOfTiffins +
                 '}';
     }
 
-    public Customer(String name, ArrayList<String> gameList) {
-        this.name = name;
-        this.gameList = gameList;
-        this.pointsEarned = 0;
-        this.foodCoupon = "No";
-        this.ticket = new Ticket();
-
+    public RegularCustomer(String customerName, int noOfTiffins) {
+        super(customerName);
+        super.billId = "R"+ ++counter;
+        this.noOfTiffins = noOfTiffins;
     }
-    void playGame(){
-        int totalPointsEarned = 0;
-        for (String game : gameList){
-            totalPointsEarned += ThemePark.getPoints(game);
-        }
-        pointsEarned = totalPointsEarned;
 
-        if(gameList.contains("Game3") && !gameList.contains("Game2")){
-            gameList.add("Game2");
-            pointsEarned += ThemePark.getPoints("Game2");
-
-        }
-
-    }
-    void updateFoodCoupon(){
-        if (gameList.contains("Game4") && pointsEarned > 15){
-            foodCoupon = "Yes";
-        }
-
-    }
-    boolean bookTicket(){
-        if(ticket.calculateAmount(gameList)){
-            ticket.generateTicketId();
-            playGame();
-            updateFoodCoupon();
-            return true;
-        }
-        else{
-            return false;
+    @Override
+    double calculateBillAmount() {
+        if(validateNoOfTiffins()){
+            super.billAmount = noOfTiffins * 7 * 50;
+            return super.billAmount;
+        }else{
+            return -1.0;
         }
 
     }
 
-    public String getName() {
-        return name;
+    public boolean validateNoOfTiffins(){
+        return (noOfTiffins >=1 && noOfTiffins <=7);
+
     }
 
-    public ArrayList<String> getGameList() {
-        return gameList;
-    }
-
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    public int getPointsEarned() {
-        return pointsEarned;
-    }
-
-    public String getFoodCoupon() {
-        return foodCoupon;
+    public int getNoOfTiffins() {
+        return noOfTiffins;
     }
 }
+
+//class Assignment27{
+//    public static void main(String[] args) {
+//
+//        Customer customer = new Customer("Boss",
+//                new ArrayList<>(Arrays.asList("Game1", "Game3", "Game4")));
+//
+//        System.out.println(customer.bookTicket());
+//        System.out.println(customer);
+//
+//    }
+//}
+//
+//class ThemePark{
+//    public static HashMap<String, ArrayList<Double>> dictOfGames =
+//            new HashMap<>();
+//    static{
+//        dictOfGames.put("Game1",new ArrayList<>(Arrays.asList(35.5,5.0)));
+//        dictOfGames.put("Game2", new ArrayList<>(Arrays.asList(40.0, 6.0)));
+//        dictOfGames.put("Game3", new ArrayList<>(Arrays.asList(120.0, 10.0)));
+//        dictOfGames.put("Game4", new ArrayList<>(Arrays.asList(60.0, 7.0)));
+//        dictOfGames.put("Game5", new ArrayList<>(Arrays.asList(25.0, 4.0)));
+//
+//    }
+//
+//    public static boolean validateGame(String gameInput){
+//        return dictOfGames.containsKey(gameInput);
+//    }
+//
+//    public static int getPoints(String gameInput){
+//        return (int)(double)dictOfGames.get(gameInput).get(1);
+//    }
+//
+//    public static double getAmount(String gameInput){
+//        return dictOfGames.get(gameInput).get(0);
+//    }
+//}
+//
+//class Ticket{
+//    private static int ticketCount = 200;
+//    private Integer ticketId;
+//    private double ticketAmount;
+//
+//    public Ticket() {
+//        this.ticketAmount = 0;
+//        this.ticketId = null;
+//    }
+//
+//    public void generateTicketId(){
+//        ticketId = ++ticketCount;
+//
+//    }
+//
+//    public boolean calculateAmount(ArrayList<String> listOfGames){
+//        double totalTicketAmount=0;
+//        for (String  game : listOfGames){
+//            if(!ThemePark.validateGame(game)){
+//                return false;
+//            }else{
+//                totalTicketAmount += ThemePark.getAmount(game);
+//            }
+//        }
+//        ticketAmount = totalTicketAmount;
+//        return true;
+//
+//    }
+//
+//    public double getTicketAmount() {
+//        return ticketAmount;
+//    }
+//
+//    public Integer getTicketId() {
+//        return ticketId;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "Ticket{" +
+//                "ticketId=" + ticketId +
+//                ", ticketAmount=" + ticketAmount +
+//                '}';
+//    }
+//}
+//
+//class Customer{
+//    private String name;
+//    private ArrayList<String> gameList;
+//    private Ticket ticket;
+//    private int pointsEarned;
+//    private String foodCoupon;
+//
+//    @Override
+//    public String toString() {
+//        return "Customer{" +
+//                "name='" + name + '\'' +
+//                ", gameList=" + gameList + "\n"+
+//                ", ticket=" + ticket +  "\n"+
+//                ", pointsEarned=" + pointsEarned +
+//                ", foodCoupon='" + foodCoupon + '\'' +
+//                '}';
+//    }
+//
+//    public Customer(String name, ArrayList<String> gameList) {
+//        this.name = name;
+//        this.gameList = gameList;
+//        this.pointsEarned = 0;
+//        this.foodCoupon = "No";
+//        this.ticket = new Ticket();
+//
+//    }
+//    void playGame(){
+//        int totalPointsEarned = 0;
+//        for (String game : gameList){
+//            totalPointsEarned += ThemePark.getPoints(game);
+//        }
+//        pointsEarned = totalPointsEarned;
+//
+//        if(gameList.contains("Game3") && !gameList.contains("Game2")){
+//            gameList.add("Game2");
+//            pointsEarned += ThemePark.getPoints("Game2");
+//
+//        }
+//
+//    }
+//    void updateFoodCoupon(){
+//        if (gameList.contains("Game4") && pointsEarned > 15){
+//            foodCoupon = "Yes";
+//        }
+//
+//    }
+//    boolean bookTicket(){
+//        if(ticket.calculateAmount(gameList)){
+//            ticket.generateTicketId();
+//            playGame();
+//            updateFoodCoupon();
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
+//
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public ArrayList<String> getGameList() {
+//        return gameList;
+//    }
+//
+//    public Ticket getTicket() {
+//        return ticket;
+//    }
+//
+//    public int getPointsEarned() {
+//        return pointsEarned;
+//    }
+//
+//    public String getFoodCoupon() {
+//        return foodCoupon;
+//    }
+//}
 
 //
 //class Assignment25{
