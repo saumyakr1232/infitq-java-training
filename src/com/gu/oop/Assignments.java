@@ -9,534 +9,697 @@ public class Assignments {
     }
 }
 
-
-class Assignment25{
+class Assignment27{
     public static void main(String[] args) {
 
-        Customer customer = new Customer("Saumya", "wholesale");
-        Customer customer1 = new Customer("Gaurav", "retail");
-        Purchase p = new Purchase(customer, "Apple", 10);
-        System.out.println(p.claculatePrice());;
-        Purchase p1 = new Purchase(customer1, "Orange", 2);
-        System.out.println(p1.claculatePrice());
+        Customer customer = new Customer("Boss",
+                new ArrayList<>(Arrays.asList("Game1", "Game3", "Game4")));
+
+        System.out.println(customer.bookTicket());
+        System.out.println(customer);
 
     }
 }
 
-class FruitInfo{
-    private static ArrayList<String> fruitNameList =
-            new ArrayList<>(Arrays.asList("Apple", "Guava", "Orange", "Grape", "Sweet Lime"));
-    private static ArrayList<Integer> fruitPriceList =
-            new ArrayList<>(Arrays.asList(200, 80, 70, 110, 60));
-
-    public static ArrayList<Integer> getFruitPriceList() {
-        return fruitPriceList;
-    }
-
-    public static ArrayList<String> getFruitNameList() {
-        return fruitNameList;
-    }
-
-    public static int getFruitPrice(String fruitName){
-        if (fruitNameList.contains(fruitName)){
-            return fruitPriceList.get(fruitNameList.indexOf(fruitName));
-        }else{
-            return -1;
-        }
-
-    }
-}
-class Customer{
-    private String customerName;
-    private String customerType;
-
-    public Customer(String customerName, String customerType) {
-        this.customerName = customerName;
-        this.customerType = customerType;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public String getCustomerType() {
-        return customerType;
-    }
-}
-
-class Purchase{
-    private String purchaseId;
-    private Customer customer;
-    private String fruitName;
-    private int quantity;
-    private static  int counter = 101;
-
-    public Purchase(Customer customer, String fruitName, int quantity) {
-        this.customer = customer;
-        this.fruitName = fruitName;
-        this.quantity = quantity;
-    }
-
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public String getFruitName() {
-        return fruitName;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-    public double claculatePrice(){
-        if (FruitInfo.getFruitNameList().contains(fruitName)){
-            double totalPrice = FruitInfo.getFruitPrice(fruitName) * quantity;
-            if(Collections.max(FruitInfo.getFruitPriceList()) == FruitInfo.getFruitPrice(fruitName)
-            && quantity > 1){
-                totalPrice = totalPrice * 0.98;
-            }else if(Collections.min(FruitInfo.getFruitPriceList()) == FruitInfo.getFruitPrice(fruitName)
-            && quantity >= 5){
-                totalPrice = totalPrice * 0.95;
-            }
-            if(customer.getCustomerType().equals("wholesale")){
-                totalPrice = totalPrice * 0.90;
-            }
-
-            purchaseId = "P"+ counter++;
-
-            return totalPrice;
-        }
-
-        return -1.0;
-    }
-}
-
-class assignment24{
-    public static void main(String[] args) {
-        Apparel cotton = new Cotton(1005.00);
-        Silk silk = new Silk(12000.00);
-        cotton.calculatePrice();
-        silk.calculatePrice();
-        System.out.println(cotton);
-        System.out.println(silk);
-    }
-}
-
-class Apparel{
-    private String itemId;
-    private double price;
-    private String itemType;
-    public  static int counter = 100;
-
-    @Override
-    public String toString() {
-        return "Apparel{" +
-                "itemId='" + itemId + '\'' +
-                ", price=" + price +
-                ", itemType='" + itemType + '\'' +
-                '}';
-    }
-
-    public Apparel(double price, String itemType) {
-        counter++;
-        if(itemType.equals("Cotton")){
-            this.itemId = "C" + counter;
-        }else{
-            this.itemId = "S" + counter;
-        }
-
-        this.price = price;
-        this.itemType = itemType;
-    }
-    void calculatePrice(){
-        this.price  = this.price* 1.05;
+class ThemePark{
+    public static HashMap<String, ArrayList<Double>> dictOfGames =
+            new HashMap<>();
+    static{
+        dictOfGames.put("Game1",new ArrayList<>(Arrays.asList(35.5,5.0)));
+        dictOfGames.put("Game2", new ArrayList<>(Arrays.asList(40.0, 6.0)));
+        dictOfGames.put("Game3", new ArrayList<>(Arrays.asList(120.0, 10.0)));
+        dictOfGames.put("Game4", new ArrayList<>(Arrays.asList(60.0, 7.0)));
+        dictOfGames.put("Game5", new ArrayList<>(Arrays.asList(25.0, 4.0)));
 
     }
 
-    public String getItemId() {
-        return itemId;
+    public static boolean validateGame(String gameInput){
+        return dictOfGames.containsKey(gameInput);
     }
 
-    public double getPrice() {
-        return price;
+    public static int getPoints(String gameInput){
+        return (int)(double)dictOfGames.get(gameInput).get(1);
     }
 
-    public String getItemType() {
-        return itemType;
+    public static double getAmount(String gameInput){
+        return dictOfGames.get(gameInput).get(0);
     }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-}
-
-class Cotton extends Apparel{
-    private double discount;
-
-    public Cotton(double price) {
-        super(price, "Cotton");
-    }
-
-    @Override
-    void calculatePrice() {
-        super.calculatePrice();
-        double finalPrice = (super.getPrice() * (1 - discount/100)) * 1.05;
-        super.setPrice(finalPrice);
-
-
-    }
-
-
-
-    public double getDiscount() {
-        return discount;
-    }
-}
-
-class Silk extends Apparel{
-    private int points;
-
-    public Silk(double price) {
-        super(price, "Silk");
-    }
-
-    @Override
-    void calculatePrice() {
-        super.calculatePrice();//service tax
-        if (super.getPrice() > 10000){
-            this.points = 10;
-        }else{
-            this.points = 3;
-        }
-        super.setPrice(super.getPrice() * 1.05);
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + "points :" + points;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-}
-
-class Assignment22{
-    public static void main(String[] args) {
-        Multiplex booking1 = new Multiplex();
-
-        int status = booking1.bookTicket("Movie1", 10);
-        switch (status){
-            case -1:
-                System.out.println("Tickets not available for movie-1");
-                break;
-            case 0:
-                System.out.println("invalid movie name");
-                break;
-            default:
-                System.out.println("Booking successful");
-                System.out.println("Seat numbers: "+ booking1.getSeatNumbers());
-                System.out.println("Total amount to be paid: "+ booking1.getTotalPrice());
-        }
-        Multiplex booking2 = new Multiplex();
-        int stat = booking2.bookTicket("Movie2", 6);
-        switch (stat){
-            case -1:
-                System.out.println("Tickets not available for movie-1");
-                break;
-            case 0:
-                System.out.println("invalid movie name");
-                break;
-            default:
-                System.out.println("Booking successful");
-                System.out.println("Seat numbers: "+ booking2.getSeatNumbers());
-                System.out.println("Total amount to be paid: "+ booking2.getTotalPrice());
-        }
-    }
-
-
-
-}
-class Multiplex{
-    private static ArrayList<String> movieNameList = new ArrayList<>(Arrays.asList("Movie1", "Movie2"));
-    private static ArrayList<Integer> totalTicketsList = new ArrayList<>(Arrays.asList(100, 60));
-    private static ArrayList<Double> ticketPriceList = new ArrayList<>(Arrays.asList(150.0, 200.0));
-    private static ArrayList<Integer> lastSeatNumberList = new ArrayList<>(Arrays.asList(0,0));
-    private ArrayList<String> seatNumbers;
-    private double totalPrice;
-
-    public Multiplex() {
-    }
-    public void generateSeatNumber(int movieIndex, int numberOfTickets){
-        ArrayList<String> seatNumbers = new ArrayList<>();
-        if (checkSeatAvailability(movieIndex, numberOfTickets)){
-
-            int startingIndex = lastSeatNumberList.get(movieIndex)==0?
-                    1: lastSeatNumberList.get(movieIndex);
-            int i;
-            for (i = startingIndex ; i<= numberOfTickets; i++){
-                seatNumbers.add("M"+ (movieIndex+1) + "-" + i);
-            }
-
-            totalTicketsList.add(movieIndex, totalTicketsList.get(movieIndex)-numberOfTickets);
-            lastSeatNumberList.add(movieIndex, i);
-        }
-
-        this.seatNumbers = seatNumbers;
-
-
-    }
-    public boolean checkSeatAvailability(int movieIndex, int numberOfTickets){
-        return totalTicketsList.get(movieIndex) >= numberOfTickets;
-
-    }
-    public void calculateTicketPrice(int movieIndex, int numberOfTickets){
-        this.totalPrice = ticketPriceList.get(movieIndex) * numberOfTickets;
-    }
-    public int bookTicket(String movieName, int numberOfTickets){
-        if (!movieNameList.contains(movieName)){
-            return 0;
-        }else{
-            int movieIndex = movieNameList.indexOf(movieName);
-            if (numberOfTickets > totalTicketsList.get(movieIndex)){
-                return -1;
-            }else{
-                generateSeatNumber(movieIndex, numberOfTickets);
-                calculateTicketPrice(movieIndex, numberOfTickets);
-                return 1;
-
-            }
-        }
-
-    }
-
-    public ArrayList<String> getSeatNumbers() {
-        return seatNumbers;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-}
-class Assignment21{
-    public static void main(String[] args) {
-        ArrayList<Integer> tests =new ArrayList<Integer>(Arrays.asList(1001,2001,3001));
-        Patient p1 = new Patient(232,"Saumya", tests);
-        p1.calculateLabTestCharge();
-        System.out.println(p1.getLabTestCharge());
-    }
-}
-
-class Patient{
-    private int patientId;
-    private String patientName;
-    private ArrayList<Integer> listOfLabTestIds;
-    private double labTestCharge;
-
-    public Patient(int patientId, String patientName, ArrayList<Integer> listOfLabTestIds){
-        this.patientId = patientId;
-        this.patientName = patientName;
-        this.listOfLabTestIds = listOfLabTestIds;
-    }
-
-    public void calculateLabTestCharge(){
-        LapTestRepository  testRepository = new LapTestRepository();
-        double totalcharge = 0;
-        for (Integer id : listOfLabTestIds){
-            totalcharge += testRepository.getLabTestCharge(id);
-        }
-        this.labTestCharge = totalcharge;
-
-    }
-
-    public int getPatientId() {
-        return patientId;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public ArrayList<Integer> getListOfLabTestIds() {
-        return listOfLabTestIds;
-    }
-
-    public double getLabTestCharge() {
-        return labTestCharge;
-    }
-}
-
-class LapTestRepository{
-    private static ArrayList<Integer> hospitalLabTestIds = new ArrayList<>(Arrays.asList(1001,2001,3001,4001));
-    private static ArrayList<Double> labTestCharges = new ArrayList<>(Arrays.asList(100.0,200.0,300.0,400.0));
-
-    public Double getLabTestCharge(Integer labTestId){
-        if (hospitalLabTestIds.contains(labTestId)){
-            return labTestCharges.get(hospitalLabTestIds.indexOf(labTestId));
-        }
-        else {
-            return 0.0;
-        }
-    }
-
-}
-
-class Assignment20{
-    public static void main(String[] args) {
-        Applicant saumya = new Applicant("Saumya");
-        System.out.println(saumya.applyForJob("Software Engineering"));
-        Applicant gaurav = new Applicant("Gaurav");
-        System.out.println(gaurav.applyForJob("CSE"));
-        saumya.applyForJob("Software Engineering");
-        saumya.applyForJob("Software Engineering");
-        saumya.applyForJob("Software Engineering");
-        saumya.applyForJob("Software Engineering");
-        saumya.applyForJob("Software Engineering");
-        System.out.println(saumya.applyForJob("Software Engineering"));
-
-        System.out.println(saumya);
-        System.out.println(gaurav);
-
-    }
-}
-class Applicant{
-    private static HashMap<String, Integer> applicationDict = new HashMap<>();
-    private static int applicantIdCount = 1000;
-    private int applicantId;
-    private String applicantName;
-    private String jobBand;
-
-    public Applicant(String applicantName) {
-        this.applicantName = applicantName;
-    }
-
-    @Override
-    public String toString() {
-        return "Applicant{" +
-                "applicantId=" + applicantId +
-                ", applicantName='" + applicantName + '\'' +
-                ", jobBand='" + jobBand + '\'' +
-                '}';
-    }
-
-    public void generateApplicantId(){
-        applicantId = ++applicantIdCount;
-    }
-    public int applyForJob(String jobBand){
-        if (!applicationDict.containsKey(jobBand)){
-            applicationDict.put(jobBand, 1);
-            generateApplicantId();
-            this.jobBand = jobBand;
-            return 1;
-
-        }else if(applicationDict.get(jobBand) <5){
-            applicationDict.put(jobBand, applicationDict.get(jobBand)+1);
-            generateApplicantId();
-            this.jobBand = jobBand;
-            return 1;
-
-        }else{
-            return - 1;
-        }
-    }
-
-    public static HashMap<String, Integer> getApplicationDict() {
-        return applicationDict;
-    }
-
-    public int getApplicantId() {
-        return applicantId;
-    }
-
-    public String getApplicantName() {
-        return applicantName;
-    }
-
-    public String getJobBand() {
-        return jobBand;
-    }
-}
-
-class Assignment19{
-    public static void main(String[] args) {
-        Ticket ticket = new Ticket("saumya", "delhi", "mumbai");
-        ticket.generateTicket();
-        Ticket ticket1 = new Ticket("gaurav", "Delhi", "Patna");
-        ticket1.generateTicket();
-        Ticket ticket2 = new Ticket("saurabh", "mumbai", "kolkata");
-        ticket2.generateTicket();
-
-        System.out.println(ticket);
-        System.out.println(ticket1);
-        System.out.println(ticket2);
-
-    }
-
 }
 
 class Ticket{
-    private String passengerName;
-    private String ticketId;
-    private String source;
-    private String destination;
-    public static int counter = 1;
+    private static int ticketCount = 200;
+    private Integer ticketId;
+    private double ticketAmount;
+
+    public Ticket() {
+        this.ticketAmount = 0;
+        this.ticketId = null;
+    }
+
+    public void generateTicketId(){
+        ticketId = ++ticketCount;
+
+    }
+
+    public boolean calculateAmount(ArrayList<String> listOfGames){
+        double totalTicketAmount=0;
+        for (String  game : listOfGames){
+            if(!ThemePark.validateGame(game)){
+                return false;
+            }else{
+                totalTicketAmount += ThemePark.getAmount(game);
+            }
+        }
+        ticketAmount = totalTicketAmount;
+        return true;
+
+    }
+
+    public double getTicketAmount() {
+        return ticketAmount;
+    }
+
+    public Integer getTicketId() {
+        return ticketId;
+    }
 
     @Override
     public String toString() {
         return "Ticket{" +
-                "passengerName='" + passengerName + '\'' +
-                ", ticketId='" + ticketId + '\'' +
-                ", source='" + source + '\'' +
-                ", destination='" + destination + '\'' +
+                "ticketId=" + ticketId +
+                ", ticketAmount=" + ticketAmount +
+                '}';
+    }
+}
+
+class Customer{
+    private String name;
+    private ArrayList<String> gameList;
+    private Ticket ticket;
+    private int pointsEarned;
+    private String foodCoupon;
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "name='" + name + '\'' +
+                ", gameList=" + gameList + "\n"+
+                ", ticket=" + ticket +  "\n"+
+                ", pointsEarned=" + pointsEarned +
+                ", foodCoupon='" + foodCoupon + '\'' +
                 '}';
     }
 
-    public Ticket(String passengerName, String source, String destinamtion) {
-        this.passengerName = passengerName;
-        this.source = source.toLowerCase();
-        this.destination = destinamtion.toLowerCase();
+    public Customer(String name, ArrayList<String> gameList) {
+        this.name = name;
+        this.gameList = gameList;
+        this.pointsEarned = 0;
+        this.foodCoupon = "No";
+        this.ticket = new Ticket();
 
     }
-    public boolean validateSourceDestination(){
-        ArrayList<String> destinations = new ArrayList<>(Arrays.asList("mumbai", "chennai", "pune", "kolkata"));
-        return source.equals("delhi") && destinations.contains(destination);
-    }
+    void playGame(){
+        int totalPointsEarned = 0;
+        for (String game : gameList){
+            totalPointsEarned += ThemePark.getPoints(game);
+        }
+        pointsEarned = totalPointsEarned;
 
-    public void generateTicket(){
-        if(validateSourceDestination()){
-            ticketId = String.valueOf(source.charAt(0)).toUpperCase()+String.valueOf(destination.charAt(0)).toUpperCase();
-            if(counter < 10){
-                ticketId +="0"+counter;
-            }else{
-                ticketId += counter;
-            }
-            counter++;
-        }else {
-            this.ticketId = "None";
+        if(gameList.contains("Game3") && !gameList.contains("Game2")){
+            gameList.add("Game2");
+            pointsEarned += ThemePark.getPoints("Game2");
 
         }
 
+    }
+    void updateFoodCoupon(){
+        if (gameList.contains("Game4") && pointsEarned > 15){
+            foodCoupon = "Yes";
+        }
+
+    }
+    boolean bookTicket(){
+        if(ticket.calculateAmount(gameList)){
+            ticket.generateTicketId();
+            playGame();
+            updateFoodCoupon();
+            return true;
+        }
+        else{
+            return false;
+        }
 
     }
 
-
-    public String getTicketId() {
-        return ticketId;
+    public String getName() {
+        return name;
     }
 
-    public String getPassengerName() {
-        return passengerName;
+    public ArrayList<String> getGameList() {
+        return gameList;
     }
 
-    public String getSource() {
-        return source;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public String getDestination() {
-        return destination;
+    public int getPointsEarned() {
+        return pointsEarned;
+    }
+
+    public String getFoodCoupon() {
+        return foodCoupon;
     }
 }
+
+//
+//class Assignment25{
+//    public static void main(String[] args) {
+//
+//        Customer customer = new Customer("Saumya", "wholesale");
+//        Customer customer1 = new Customer("Gaurav", "retail");
+//        Purchase p = new Purchase(customer, "Apple", 10);
+//        System.out.println(p.claculatePrice());;
+//        Purchase p1 = new Purchase(customer1, "Orange", 2);
+//        System.out.println(p1.claculatePrice());
+//
+//    }
+//}
+//
+//class FruitInfo{
+//    private static ArrayList<String> fruitNameList =
+//            new ArrayList<>(Arrays.asList("Apple", "Guava", "Orange", "Grape", "Sweet Lime"));
+//    private static ArrayList<Integer> fruitPriceList =
+//            new ArrayList<>(Arrays.asList(200, 80, 70, 110, 60));
+//
+//    public static ArrayList<Integer> getFruitPriceList() {
+//        return fruitPriceList;
+//    }
+//
+//    public static ArrayList<String> getFruitNameList() {
+//        return fruitNameList;
+//    }
+//
+//    public static int getFruitPrice(String fruitName){
+//        if (fruitNameList.contains(fruitName)){
+//            return fruitPriceList.get(fruitNameList.indexOf(fruitName));
+//        }else{
+//            return -1;
+//        }
+//
+//    }
+//}
+//class Customer{
+//    private String customerName;
+//    private String customerType;
+//
+//    public Customer(String customerName, String customerType) {
+//        this.customerName = customerName;
+//        this.customerType = customerType;
+//    }
+//
+//    public String getCustomerName() {
+//        return customerName;
+//    }
+//
+//    public String getCustomerType() {
+//        return customerType;
+//    }
+//}
+//
+//class Purchase{
+//    private String purchaseId;
+//    private Customer customer;
+//    private String fruitName;
+//    private int quantity;
+//    private static  int counter = 101;
+//
+//    public Purchase(Customer customer, String fruitName, int quantity) {
+//        this.customer = customer;
+//        this.fruitName = fruitName;
+//        this.quantity = quantity;
+//    }
+//
+//
+//    public Customer getCustomer() {
+//        return customer;
+//    }
+//
+//    public String getFruitName() {
+//        return fruitName;
+//    }
+//
+//    public int getQuantity() {
+//        return quantity;
+//    }
+//    public double claculatePrice(){
+//        if (FruitInfo.getFruitNameList().contains(fruitName)){
+//            double totalPrice = FruitInfo.getFruitPrice(fruitName) * quantity;
+//            if(Collections.max(FruitInfo.getFruitPriceList()) == FruitInfo.getFruitPrice(fruitName)
+//            && quantity > 1){
+//                totalPrice = totalPrice * 0.98;
+//            }else if(Collections.min(FruitInfo.getFruitPriceList()) == FruitInfo.getFruitPrice(fruitName)
+//            && quantity >= 5){
+//                totalPrice = totalPrice * 0.95;
+//            }
+//            if(customer.getCustomerType().equals("wholesale")){
+//                totalPrice = totalPrice * 0.90;
+//            }
+//
+//            purchaseId = "P"+ counter++;
+//
+//            return totalPrice;
+//        }
+//
+//        return -1.0;
+//    }
+//}
+//
+//class assignment24{
+//    public static void main(String[] args) {
+//        Apparel cotton = new Cotton(1005.00);
+//        Silk silk = new Silk(12000.00);
+//        cotton.calculatePrice();
+//        silk.calculatePrice();
+//        System.out.println(cotton);
+//        System.out.println(silk);
+//    }
+//}
+//
+//class Apparel{
+//    private String itemId;
+//    private double price;
+//    private String itemType;
+//    public  static int counter = 100;
+//
+//    @Override
+//    public String toString() {
+//        return "Apparel{" +
+//                "itemId='" + itemId + '\'' +
+//                ", price=" + price +
+//                ", itemType='" + itemType + '\'' +
+//                '}';
+//    }
+//
+//    public Apparel(double price, String itemType) {
+//        counter++;
+//        if(itemType.equals("Cotton")){
+//            this.itemId = "C" + counter;
+//        }else{
+//            this.itemId = "S" + counter;
+//        }
+//
+//        this.price = price;
+//        this.itemType = itemType;
+//    }
+//    void calculatePrice(){
+//        this.price  = this.price* 1.05;
+//
+//    }
+//
+//    public String getItemId() {
+//        return itemId;
+//    }
+//
+//    public double getPrice() {
+//        return price;
+//    }
+//
+//    public String getItemType() {
+//        return itemType;
+//    }
+//
+//    public void setPrice(double price) {
+//        this.price = price;
+//    }
+//}
+//
+//class Cotton extends Apparel{
+//    private double discount;
+//
+//    public Cotton(double price) {
+//        super(price, "Cotton");
+//    }
+//
+//    @Override
+//    void calculatePrice() {
+//        super.calculatePrice();
+//        double finalPrice = (super.getPrice() * (1 - discount/100)) * 1.05;
+//        super.setPrice(finalPrice);
+//
+//
+//    }
+//
+//
+//
+//    public double getDiscount() {
+//        return discount;
+//    }
+//}
+//
+//class Silk extends Apparel{
+//    private int points;
+//
+//    public Silk(double price) {
+//        super(price, "Silk");
+//    }
+//
+//    @Override
+//    void calculatePrice() {
+//        super.calculatePrice();//service tax
+//        if (super.getPrice() > 10000){
+//            this.points = 10;
+//        }else{
+//            this.points = 3;
+//        }
+//        super.setPrice(super.getPrice() * 1.05);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return super.toString() + "points :" + points;
+//    }
+//
+//    public int getPoints() {
+//        return points;
+//    }
+//}
+//
+//class Assignment22{
+//    public static void main(String[] args) {
+//        Multiplex booking1 = new Multiplex();
+//
+//        int status = booking1.bookTicket("Movie1", 10);
+//        switch (status){
+//            case -1:
+//                System.out.println("Tickets not available for movie-1");
+//                break;
+//            case 0:
+//                System.out.println("invalid movie name");
+//                break;
+//            default:
+//                System.out.println("Booking successful");
+//                System.out.println("Seat numbers: "+ booking1.getSeatNumbers());
+//                System.out.println("Total amount to be paid: "+ booking1.getTotalPrice());
+//        }
+//        Multiplex booking2 = new Multiplex();
+//        int stat = booking2.bookTicket("Movie2", 6);
+//        switch (stat){
+//            case -1:
+//                System.out.println("Tickets not available for movie-1");
+//                break;
+//            case 0:
+//                System.out.println("invalid movie name");
+//                break;
+//            default:
+//                System.out.println("Booking successful");
+//                System.out.println("Seat numbers: "+ booking2.getSeatNumbers());
+//                System.out.println("Total amount to be paid: "+ booking2.getTotalPrice());
+//        }
+//    }
+//
+//
+//
+//}
+//class Multiplex{
+//    private static ArrayList<String> movieNameList = new ArrayList<>(Arrays.asList("Movie1", "Movie2"));
+//    private static ArrayList<Integer> totalTicketsList = new ArrayList<>(Arrays.asList(100, 60));
+//    private static ArrayList<Double> ticketPriceList = new ArrayList<>(Arrays.asList(150.0, 200.0));
+//    private static ArrayList<Integer> lastSeatNumberList = new ArrayList<>(Arrays.asList(0,0));
+//    private ArrayList<String> seatNumbers;
+//    private double totalPrice;
+//
+//    public Multiplex() {
+//    }
+//    public void generateSeatNumber(int movieIndex, int numberOfTickets){
+//        ArrayList<String> seatNumbers = new ArrayList<>();
+//        if (checkSeatAvailability(movieIndex, numberOfTickets)){
+//
+//            int startingIndex = lastSeatNumberList.get(movieIndex)==0?
+//                    1: lastSeatNumberList.get(movieIndex);
+//            int i;
+//            for (i = startingIndex ; i<= numberOfTickets; i++){
+//                seatNumbers.add("M"+ (movieIndex+1) + "-" + i);
+//            }
+//
+//            totalTicketsList.add(movieIndex, totalTicketsList.get(movieIndex)-numberOfTickets);
+//            lastSeatNumberList.add(movieIndex, i);
+//        }
+//
+//        this.seatNumbers = seatNumbers;
+//
+//
+//    }
+//    public boolean checkSeatAvailability(int movieIndex, int numberOfTickets){
+//        return totalTicketsList.get(movieIndex) >= numberOfTickets;
+//
+//    }
+//    public void calculateTicketPrice(int movieIndex, int numberOfTickets){
+//        this.totalPrice = ticketPriceList.get(movieIndex) * numberOfTickets;
+//    }
+//    public int bookTicket(String movieName, int numberOfTickets){
+//        if (!movieNameList.contains(movieName)){
+//            return 0;
+//        }else{
+//            int movieIndex = movieNameList.indexOf(movieName);
+//            if (numberOfTickets > totalTicketsList.get(movieIndex)){
+//                return -1;
+//            }else{
+//                generateSeatNumber(movieIndex, numberOfTickets);
+//                calculateTicketPrice(movieIndex, numberOfTickets);
+//                return 1;
+//
+//            }
+//        }
+//
+//    }
+//
+//    public ArrayList<String> getSeatNumbers() {
+//        return seatNumbers;
+//    }
+//
+//    public double getTotalPrice() {
+//        return totalPrice;
+//    }
+//}
+//class Assignment21{
+//    public static void main(String[] args) {
+//        ArrayList<Integer> tests =new ArrayList<Integer>(Arrays.asList(1001,2001,3001));
+//        Patient p1 = new Patient(232,"Saumya", tests);
+//        p1.calculateLabTestCharge();
+//        System.out.println(p1.getLabTestCharge());
+//    }
+//}
+//
+//class Patient{
+//    private int patientId;
+//    private String patientName;
+//    private ArrayList<Integer> listOfLabTestIds;
+//    private double labTestCharge;
+//
+//    public Patient(int patientId, String patientName, ArrayList<Integer> listOfLabTestIds){
+//        this.patientId = patientId;
+//        this.patientName = patientName;
+//        this.listOfLabTestIds = listOfLabTestIds;
+//    }
+//
+//    public void calculateLabTestCharge(){
+//        LapTestRepository  testRepository = new LapTestRepository();
+//        double totalcharge = 0;
+//        for (Integer id : listOfLabTestIds){
+//            totalcharge += testRepository.getLabTestCharge(id);
+//        }
+//        this.labTestCharge = totalcharge;
+//
+//    }
+//
+//    public int getPatientId() {
+//        return patientId;
+//    }
+//
+//    public String getPatientName() {
+//        return patientName;
+//    }
+//
+//    public ArrayList<Integer> getListOfLabTestIds() {
+//        return listOfLabTestIds;
+//    }
+//
+//    public double getLabTestCharge() {
+//        return labTestCharge;
+//    }
+//}
+//
+//class LapTestRepository{
+//    private static ArrayList<Integer> hospitalLabTestIds = new ArrayList<>(Arrays.asList(1001,2001,3001,4001));
+//    private static ArrayList<Double> labTestCharges = new ArrayList<>(Arrays.asList(100.0,200.0,300.0,400.0));
+//
+//    public Double getLabTestCharge(Integer labTestId){
+//        if (hospitalLabTestIds.contains(labTestId)){
+//            return labTestCharges.get(hospitalLabTestIds.indexOf(labTestId));
+//        }
+//        else {
+//            return 0.0;
+//        }
+//    }
+//
+//}
+//
+//class Assignment20{
+//    public static void main(String[] args) {
+//        Applicant saumya = new Applicant("Saumya");
+//        System.out.println(saumya.applyForJob("Software Engineering"));
+//        Applicant gaurav = new Applicant("Gaurav");
+//        System.out.println(gaurav.applyForJob("CSE"));
+//        saumya.applyForJob("Software Engineering");
+//        saumya.applyForJob("Software Engineering");
+//        saumya.applyForJob("Software Engineering");
+//        saumya.applyForJob("Software Engineering");
+//        saumya.applyForJob("Software Engineering");
+//        System.out.println(saumya.applyForJob("Software Engineering"));
+//
+//        System.out.println(saumya);
+//        System.out.println(gaurav);
+//
+//    }
+//}
+//class Applicant{
+//    private static HashMap<String, Integer> applicationDict = new HashMap<>();
+//    private static int applicantIdCount = 1000;
+//    private int applicantId;
+//    private String applicantName;
+//    private String jobBand;
+//
+//    public Applicant(String applicantName) {
+//        this.applicantName = applicantName;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "Applicant{" +
+//                "applicantId=" + applicantId +
+//                ", applicantName='" + applicantName + '\'' +
+//                ", jobBand='" + jobBand + '\'' +
+//                '}';
+//    }
+//
+//    public void generateApplicantId(){
+//        applicantId = ++applicantIdCount;
+//    }
+//    public int applyForJob(String jobBand){
+//        if (!applicationDict.containsKey(jobBand)){
+//            applicationDict.put(jobBand, 1);
+//            generateApplicantId();
+//            this.jobBand = jobBand;
+//            return 1;
+//
+//        }else if(applicationDict.get(jobBand) <5){
+//            applicationDict.put(jobBand, applicationDict.get(jobBand)+1);
+//            generateApplicantId();
+//            this.jobBand = jobBand;
+//            return 1;
+//
+//        }else{
+//            return - 1;
+//        }
+//    }
+//
+//    public static HashMap<String, Integer> getApplicationDict() {
+//        return applicationDict;
+//    }
+//
+//    public int getApplicantId() {
+//        return applicantId;
+//    }
+//
+//    public String getApplicantName() {
+//        return applicantName;
+//    }
+//
+//    public String getJobBand() {
+//        return jobBand;
+//    }
+//}
+//
+//class Assignment19{
+//    public static void main(String[] args) {
+//        Ticket ticket = new Ticket("saumya", "delhi", "mumbai");
+//        ticket.generateTicket();
+//        Ticket ticket1 = new Ticket("gaurav", "Delhi", "Patna");
+//        ticket1.generateTicket();
+//        Ticket ticket2 = new Ticket("saurabh", "mumbai", "kolkata");
+//        ticket2.generateTicket();
+//
+//        System.out.println(ticket);
+//        System.out.println(ticket1);
+//        System.out.println(ticket2);
+//
+//    }
+//
+//}
+//
+//class Ticket{
+//    private String passengerName;
+//    private String ticketId;
+//    private String source;
+//    private String destination;
+//    public static int counter = 1;
+//
+//    @Override
+//    public String toString() {
+//        return "Ticket{" +
+//                "passengerName='" + passengerName + '\'' +
+//                ", ticketId='" + ticketId + '\'' +
+//                ", source='" + source + '\'' +
+//                ", destination='" + destination + '\'' +
+//                '}';
+//    }
+//
+//    public Ticket(String passengerName, String source, String destinamtion) {
+//        this.passengerName = passengerName;
+//        this.source = source.toLowerCase();
+//        this.destination = destinamtion.toLowerCase();
+//
+//    }
+//    public boolean validateSourceDestination(){
+//        ArrayList<String> destinations = new ArrayList<>(Arrays.asList("mumbai", "chennai", "pune", "kolkata"));
+//        return source.equals("delhi") && destinations.contains(destination);
+//    }
+//
+//    public void generateTicket(){
+//        if(validateSourceDestination()){
+//            ticketId = String.valueOf(source.charAt(0)).toUpperCase()+String.valueOf(destination.charAt(0)).toUpperCase();
+//            if(counter < 10){
+//                ticketId +="0"+counter;
+//            }else{
+//                ticketId += counter;
+//            }
+//            counter++;
+//        }else {
+//            this.ticketId = "None";
+//
+//        }
+//
+//
+//    }
+//
+//
+//    public String getTicketId() {
+//        return ticketId;
+//    }
+//
+//    public String getPassengerName() {
+//        return passengerName;
+//    }
+//
+//    public String getSource() {
+//        return source;
+//    }
+//
+//    public String getDestination() {
+//        return destination;
+//    }
+//}
 //class Assignment18{
 //    public static void main(String[] args) {
 //        Customer customer = new Customer("Saumya");
