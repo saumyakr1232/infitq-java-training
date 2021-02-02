@@ -10,128 +10,261 @@ public class Assignments {
 }
 
 
+class Assignment30{
+    static public void main(String...args){
+        Customer customer = new Customer("Golu", 3);
 
+        Pizzaservice pizzaservice = new Pizzaservice(customer, "medium", true);
+        pizzaservice.calculatePizzaCost();
 
-class Assignment29{
-    public static void main(String[] args) {
-        Customer regularCustomer = new RegularCustomer("Saumya", 5);
-        Customer oCustomer = new OccasionalCustomer("Lalu", 3);
-
-        System.out.println(regularCustomer.calculateBillAmount());
-        System.out.println(oCustomer.calculateBillAmount());
-
-        System.out.println("Regular Customer: -" + regularCustomer);
-        System.out.println("Occasional customer: -"+ oCustomer);
+        System.out.println(customer);
+        System.out.println("Normal pizzaservice cost : " + pizzaservice.pizzaCost);
+        Doordelivery doordelivery = new Doordelivery(customer,"medium", true, 6);
+        doordelivery.calculatePizzaCost();
+        System.out.println("Doordelivery cost:  " + doordelivery.pizzaCost);
 
     }
 }
-
-abstract class Customer{
+class Customer{
     private String customerName;
-    public double billAmount;
-    public String billId;
-
-    public Customer(String customerName) {
-        this.customerName = customerName;
-    }
-
-
-    abstract double calculateBillAmount();
-
-    public String getCustomerName() {
-        return customerName;
-    }
+    private int quantity;
 
     @Override
     public String toString() {
         return "Customer{" +
                 "customerName='" + customerName + '\'' +
-                ", billAmount=" + billAmount +
-                ", billId='" + billId + '\'' +
+                ", quantity=" + quantity +
                 '}';
+    }
+
+    public Customer(String customerName, int quantity) {
+        this.customerName = customerName;
+        this.quantity = quantity;
+    }
+
+    public boolean validateQuantity(){
+        return (quantity>=1 && quantity<= 5);
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }
 
-class OccasionalCustomer extends  Customer{
+class Pizzaservice{
+    private String serviceId;
+    private Customer customer;
+    private String pizzaType;
+    private boolean additionalTopping;
+    public double pizzaCost;
+    public static int counter = 100;
+
+    public Pizzaservice(Customer customer , String pizzaType, boolean additionalTopping){
+        this.customer = customer;
+        this.pizzaType =  pizzaType.toLowerCase();
+        this.additionalTopping = additionalTopping;
+
+    }
+
+    boolean validatePizzaType(){
+        return  (pizzaType.equals("small") || pizzaType.equals("medium"));
+
+    }
+
+    void calculatePizzaCost(){
+        if (validatePizzaType()){
+            if (pizzaType.equals("small")){
+                serviceId = "S" + ++counter;
+                pizzaCost = 150 + (additionalTopping? 35: 0);
+            }else{
+                serviceId = "M" + ++counter;
+                pizzaCost = 200 + (additionalTopping? 50: 0);
+            }
+        }else{
+            pizzaCost = -1;
+        }
+
+
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public String getPizzaType() {
+        return pizzaType;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public boolean getAdditionalTopping() {
+        return additionalTopping;
+    }
+}
+
+class Doordelivery extends Pizzaservice{
+    private double deliveryCharge;
     private double distanceInKms;
-    private static int counter = 1000;
 
-
-    public OccasionalCustomer(String customerName, int distanceInKms) {
-        super(customerName);
-        super.billId = "O" + ++counter;
+    public Doordelivery(Customer customer, String pizzaType,
+                        boolean additionalTopping, double distanceInKms) {
+        super(customer, pizzaType,additionalTopping);
         this.distanceInKms = distanceInKms;
     }
 
-    public boolean validateDistanceInKms(){
-        return  (distanceInKms >=1 && distanceInKms <= 5);
+    boolean validateDistanceInKms(){
+        return (distanceInKms >=1 && distanceInKms<= 10);
+    }
+
+    @Override
+    void calculatePizzaCost(){
+        if(validateDistanceInKms()){
+            super.calculatePizzaCost();
+            if (super.pizzaCost != -1){
+                pizzaCost += distanceInKms * (distanceInKms <=5? 5:7);
+
+            }
+
+        }
+
     }
 
     public double getDistanceInKms() {
         return distanceInKms;
     }
 
-    @Override
-    double calculateBillAmount() {
-        if(validateDistanceInKms()){
-
-            super.billAmount = ((distanceInKms) * (distanceInKms<=2 ? 5 : 7.5)) + 50;
-            return super.billAmount;
-        }else{
-            return -1.0;
-        }
-
-    }
-
-    @Override
-    public String toString() {
-        return "OccasionalCustomer{" +
-                "billAmount=" + billAmount +
-                ", billId='" + billId + '\'' +
-                ", distanceInKms=" + distanceInKms +
-                '}';
+    public double getDeliveryCharge() {
+        return deliveryCharge;
     }
 }
 
-class RegularCustomer extends Customer{
-    private int noOfTiffins;
-    static private int counter = 100;
 
-    @Override
-    public String toString() {
-        return "RegularCustomer{" +
-                "billAmount=" + billAmount +
-                ", billId='" + billId + '\'' +
-                ", noOfTiffins=" + noOfTiffins +
-                '}';
-    }
-
-    public RegularCustomer(String customerName, int noOfTiffins) {
-        super(customerName);
-        super.billId = "R"+ ++counter;
-        this.noOfTiffins = noOfTiffins;
-    }
-
-    @Override
-    double calculateBillAmount() {
-        if(validateNoOfTiffins()){
-            super.billAmount = noOfTiffins * 7 * 50;
-            return super.billAmount;
-        }else{
-            return -1.0;
-        }
-
-    }
-
-    public boolean validateNoOfTiffins(){
-        return (noOfTiffins >=1 && noOfTiffins <=7);
-
-    }
-
-    public int getNoOfTiffins() {
-        return noOfTiffins;
-    }
-}
+//class Assignment29{
+//    public static void main(String[] args) {
+//        Customer regularCustomer = new RegularCustomer("Saumya", 5);
+//        Customer oCustomer = new OccasionalCustomer("Lalu", 3);
+//
+//        System.out.println(regularCustomer.calculateBillAmount());
+//        System.out.println(oCustomer.calculateBillAmount());
+//
+//        System.out.println("Regular Customer: -" + regularCustomer);
+//        System.out.println("Occasional customer: -"+ oCustomer);
+//
+//    }
+//}
+//
+//abstract class Customer{
+//    private String customerName;
+//    public double billAmount;
+//    public String billId;
+//
+//    public Customer(String customerName) {
+//        this.customerName = customerName;
+//    }
+//
+//
+//    abstract double calculateBillAmount();
+//
+//    public String getCustomerName() {
+//        return customerName;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "Customer{" +
+//                "customerName='" + customerName + '\'' +
+//                ", billAmount=" + billAmount +
+//                ", billId='" + billId + '\'' +
+//                '}';
+//    }
+//}
+//
+//class OccasionalCustomer extends  Customer{
+//    private double distanceInKms;
+//    private static int counter = 1000;
+//
+//
+//    public OccasionalCustomer(String customerName, int distanceInKms) {
+//        super(customerName);
+//        super.billId = "O" + ++counter;
+//        this.distanceInKms = distanceInKms;
+//    }
+//
+//    public boolean validateDistanceInKms(){
+//        return  (distanceInKms >=1 && distanceInKms <= 5);
+//    }
+//
+//    public double getDistanceInKms() {
+//        return distanceInKms;
+//    }
+//
+//    @Override
+//    double calculateBillAmount() {
+//        if(validateDistanceInKms()){
+//
+//            super.billAmount = ((distanceInKms) * (distanceInKms<=2 ? 5 : 7.5)) + 50;
+//            return super.billAmount;
+//        }else{
+//            return -1.0;
+//        }
+//
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "OccasionalCustomer{" +
+//                "billAmount=" + billAmount +
+//                ", billId='" + billId + '\'' +
+//                ", distanceInKms=" + distanceInKms +
+//                '}';
+//    }
+//}
+//
+//class RegularCustomer extends Customer{
+//    private int noOfTiffins;
+//    static private int counter = 100;
+//
+//    @Override
+//    public String toString() {
+//        return "RegularCustomer{" +
+//                "billAmount=" + billAmount +
+//                ", billId='" + billId + '\'' +
+//                ", noOfTiffins=" + noOfTiffins +
+//                '}';
+//    }
+//
+//    public RegularCustomer(String customerName, int noOfTiffins) {
+//        super(customerName);
+//        super.billId = "R"+ ++counter;
+//        this.noOfTiffins = noOfTiffins;
+//    }
+//
+//    @Override
+//    double calculateBillAmount() {
+//        if(validateNoOfTiffins()){
+//            super.billAmount = noOfTiffins * 7 * 50;
+//            return super.billAmount;
+//        }else{
+//            return -1.0;
+//        }
+//
+//    }
+//
+//    public boolean validateNoOfTiffins(){
+//        return (noOfTiffins >=1 && noOfTiffins <=7);
+//
+//    }
+//
+//    public int getNoOfTiffins() {
+//        return noOfTiffins;
+//    }
+//}
 
 //class Assignment27{
 //    public static void main(String[] args) {
