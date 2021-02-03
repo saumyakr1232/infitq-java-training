@@ -1,6 +1,8 @@
 package com.gu.oop;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class Assignments {
     public static void main(String[] args) {
@@ -10,139 +12,315 @@ public class Assignments {
 }
 
 
-class Assignment30{
-    static public void main(String...args){
-        Customer customer = new Customer("Golu", 3);
+//class Assignment31{
+//    public static void main(String[] args) {
+//       PassengerLogistics passengerLogistics = new PassengerLogistics(300, 400, "BMW");
+//       double billAmount = passengerLogistics.calculateBillAmount();
+//       if(billAmount == -1){
+//           System.out.println("Invalid vehicle type or meter reading");
+//       }else {
+//           System.out.println(passengerLogistics);
+//           System.out.println("Total amount: " + billAmount );
+//       }
+//        System.out.println("------------------------------------------------");
+//       GoodsLogistics goodsLogistics = new GoodsLogistics(300,400, 3000, "FORCE" );
+//       billAmount = goodsLogistics.calculateBillAmount();
+//       if(billAmount == -1){
+//           System.out.println("Invalid career type or meter reading");
+//
+//       }else{
+//           System.out.println(goodsLogistics);
+//           System.out.println("Total amount: " + billAmount);
+//       }
+//    }
+//}
+//
+//abstract class Logistics{
+//    private static int counter = 7000;
+//    private String consumerId;
+//    private int startReading;
+//    private int endReading;
+//
+//    public Logistics(int startReading, int endReading) {
+//        this.startReading = startReading;
+//        this.endReading = endReading;
+//    }
+//
+//    public String getConsumerId() {
+//        return consumerId;
+//    }
+//
+//    public int getStartReading() {
+//        return startReading;
+//    }
+//
+//    public int getEndReading() {
+//        return endReading;
+//    }
+//
+//    public boolean validateMeterReading(){
+//        return endReading>= startReading;
+//    }
+//    public void generateConsumerId(){
+//        consumerId = String.valueOf(++counter);
+//
+//    }
+//
+//    abstract public double calculateBillAmount();
+//}
+//
+//class PassengerLogistics extends Logistics{
+//    private static ArrayList<String> vehicleList = new ArrayList<>(Arrays.asList("BMW", "TOYOTA", "FORD/"));
+//    private static ArrayList<Integer> minimumChargeList = new ArrayList<>(Arrays.asList(3000, 1500, 1000));
+//    private static ArrayList<Integer> chargeForHundredList =
+//            new ArrayList<>(Arrays.asList(30, 15, 10));
+//    private static ArrayList<Integer> chargeAfterHundredList =
+//            new ArrayList<>(Arrays.asList(25, 12,7));
+//    private String vehicleType;
+//
+//    public PassengerLogistics(int startReading, int endReading, String vehicleType) {
+//        super(startReading, endReading);
+//        this.vehicleType = vehicleType;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "PassengerLogistics{" +
+//                "consumerId='" + getConsumerId()+ '\'' + "\n"+
+//                "vehicleType='" + vehicleType + '\'' + "\n"+
+//                "startReading='"+ getStartReading() + '\'' + "\n"+
+//                "endReading='" + getEndReading() + '\'' + "\n"+
+//                '}';
+//    }
+//
+//    public String getVehicleType() {
+//        return vehicleType;
+//    }
+//
+//    public boolean validateVehicleType(){
+//        return PassengerLogistics.vehicleList.contains(vehicleType);
+//    }
+//
+//    @Override
+//    public double calculateBillAmount() {
+//        if(validateMeterReading() && validateVehicleType()){
+//            generateConsumerId();
+//            int distanceTravelled = getEndReading() - getStartReading();
+//            double billAmount = 0;
+//            if (distanceTravelled <= 100){
+//                billAmount = distanceTravelled * chargeForHundredList.get(vehicleList.indexOf(vehicleType));
+//
+//            }else{
+//
+//                billAmount = 100 * chargeForHundredList.get(vehicleList.indexOf(vehicleType));
+//                billAmount += (distanceTravelled-100) * chargeAfterHundredList.get(vehicleList.indexOf(vehicleType));
+//            }
+//            int minimumCharge = minimumChargeList.get(vehicleList.indexOf(vehicleType));
+//            if (billAmount < minimumCharge ){
+//                billAmount = minimumCharge;
+//            }
+//            billAmount = billAmount * 1.05; //service tax
+//            return billAmount;
+//        }else{
+//            return -1.0;
+//        }
+//
+//    }
+//}
+//
+//class GoodsLogistics extends Logistics{
+//    private static HashMap<String, Integer> carrierDict = new HashMap<>();
+//    static{
+//        carrierDict.put("TATA", 20);
+//        carrierDict.put("EICHER", 30);
+//        carrierDict.put("FORCE", 35);
+//    }
+//    private double goodsWeight;
+//    private String carrierType;
+//
+//    public GoodsLogistics(int startReading, int endReading, double goodsWeight, String carrierType) {
+//        super(startReading, endReading);
+//        this.goodsWeight = goodsWeight;
+//        this.carrierType = carrierType;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "GoodsLogistics{" +
+//                "goodsWeight=" + goodsWeight +
+//                ", StartReading ='" + getStartReading() + '\'' + "\n" +
+//                ", End reading ='" + getEndReading() + '\'' + "\n" +
+//                '}';
+//    }
+//
+//    public String getCarrierType() {
+//        return carrierType;
+//    }
+//
+//    public double getGoodsWeight() {
+//        return goodsWeight;
+//    }
+//    public boolean validateCarrierType(){
+//        return carrierDict.containsKey(carrierType);
+//    }
+//
+//    @Override
+//    public double calculateBillAmount() {
+//        if(validateCarrierType() && validateMeterReading()){
+//            generateConsumerId();
+//            int distanceTravelled = getEndReading() - getStartReading();
+//            double billAmount = 0;
+//
+//            billAmount = distanceTravelled *
+//                    goodsWeight<3000? ((goodsWeight/1000) + 1) * carrierDict.get(carrierType): 200;
+//                    //if goodsWeight < 300 then  (range of thousand) * price else 200
+//            billAmount = billAmount * 1.10; //service tax
+//            billAmount += 2000; //sales tax
+//            return billAmount;
+//
+//        }else{
+//            return -1.0;
+//        }
+//
+//    }
+//}
+//
 
-        Pizzaservice pizzaservice = new Pizzaservice(customer, "medium", true);
-        pizzaservice.calculatePizzaCost();
 
-        System.out.println(customer);
-        System.out.println("Normal pizzaservice cost : " + pizzaservice.pizzaCost);
-        Doordelivery doordelivery = new Doordelivery(customer,"medium", true, 6);
-        doordelivery.calculatePizzaCost();
-        System.out.println("Doordelivery cost:  " + doordelivery.pizzaCost);
-
-    }
-}
-class Customer{
-    private String customerName;
-    private int quantity;
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "customerName='" + customerName + '\'' +
-                ", quantity=" + quantity +
-                '}';
-    }
-
-    public Customer(String customerName, int quantity) {
-        this.customerName = customerName;
-        this.quantity = quantity;
-    }
-
-    public boolean validateQuantity(){
-        return (quantity>=1 && quantity<= 5);
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-}
-
-class Pizzaservice{
-    private String serviceId;
-    private Customer customer;
-    private String pizzaType;
-    private boolean additionalTopping;
-    public double pizzaCost;
-    public static int counter = 100;
-
-    public Pizzaservice(Customer customer , String pizzaType, boolean additionalTopping){
-        this.customer = customer;
-        this.pizzaType =  pizzaType.toLowerCase();
-        this.additionalTopping = additionalTopping;
-
-    }
-
-    boolean validatePizzaType(){
-        return  (pizzaType.equals("small") || pizzaType.equals("medium"));
-
-    }
-
-    void calculatePizzaCost(){
-        if (validatePizzaType()){
-            if (pizzaType.equals("small")){
-                serviceId = "S" + ++counter;
-                pizzaCost = 150 + (additionalTopping? 35: 0);
-            }else{
-                serviceId = "M" + ++counter;
-                pizzaCost = 200 + (additionalTopping? 50: 0);
-            }
-        }else{
-            pizzaCost = -1;
-        }
-
-
-    }
-
-    public String getServiceId() {
-        return serviceId;
-    }
-
-    public String getPizzaType() {
-        return pizzaType;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public boolean getAdditionalTopping() {
-        return additionalTopping;
-    }
-}
-
-class Doordelivery extends Pizzaservice{
-    private double deliveryCharge;
-    private double distanceInKms;
-
-    public Doordelivery(Customer customer, String pizzaType,
-                        boolean additionalTopping, double distanceInKms) {
-        super(customer, pizzaType,additionalTopping);
-        this.distanceInKms = distanceInKms;
-    }
-
-    boolean validateDistanceInKms(){
-        return (distanceInKms >=1 && distanceInKms<= 10);
-    }
-
-    @Override
-    void calculatePizzaCost(){
-        if(validateDistanceInKms()){
-            super.calculatePizzaCost();
-            if (super.pizzaCost != -1){
-                pizzaCost += distanceInKms * (distanceInKms <=5? 5:7);
-
-            }
-
-        }
-
-    }
-
-    public double getDistanceInKms() {
-        return distanceInKms;
-    }
-
-    public double getDeliveryCharge() {
-        return deliveryCharge;
-    }
-}
+//
+//class Assignment30{
+//    static public void main(String...args){
+//        Customer customer = new Customer("Golu", 3);
+//
+//        Pizzaservice pizzaservice = new Pizzaservice(customer, "medium", true);
+//        pizzaservice.calculatePizzaCost();
+//
+//        System.out.println(customer);
+//        System.out.println("Normal pizzaservice cost : " + pizzaservice.pizzaCost);
+//        Doordelivery doordelivery = new Doordelivery(customer,"medium", true, 6);
+//        doordelivery.calculatePizzaCost();
+//        System.out.println("Doordelivery cost:  " + doordelivery.pizzaCost);
+//
+//    }
+//}
+//class Customer{
+//    private String customerName;
+//    private int quantity;
+//
+//    @Override
+//    public String toString() {
+//        return "Customer{" +
+//                "customerName='" + customerName + '\'' +
+//                ", quantity=" + quantity +
+//                '}';
+//    }
+//
+//    public Customer(String customerName, int quantity) {
+//        this.customerName = customerName;
+//        this.quantity = quantity;
+//    }
+//
+//    public boolean validateQuantity(){
+//        return (quantity>=1 && quantity<= 5);
+//    }
+//
+//    public String getCustomerName() {
+//        return customerName;
+//    }
+//
+//    public int getQuantity() {
+//        return quantity;
+//    }
+//}
+//
+//class Pizzaservice{
+//    private String serviceId;
+//    private Customer customer;
+//    private String pizzaType;
+//    private boolean additionalTopping;
+//    public double pizzaCost;
+//    public static int counter = 100;
+//
+//    public Pizzaservice(Customer customer , String pizzaType, boolean additionalTopping){
+//        this.customer = customer;
+//        this.pizzaType =  pizzaType.toLowerCase();
+//        this.additionalTopping = additionalTopping;
+//
+//    }
+//
+//    boolean validatePizzaType(){
+//        return  (pizzaType.equals("small") || pizzaType.equals("medium"));
+//
+//    }
+//
+//    void calculatePizzaCost(){
+//        if (validatePizzaType()){
+//            if (pizzaType.equals("small")){
+//                serviceId = "S" + ++counter;
+//                pizzaCost = 150 + (additionalTopping? 35: 0);
+//            }else{
+//                serviceId = "M" + ++counter;
+//                pizzaCost = 200 + (additionalTopping? 50: 0);
+//            }
+//        }else{
+//            pizzaCost = -1;
+//        }
+//
+//
+//    }
+//
+//    public String getServiceId() {
+//        return serviceId;
+//    }
+//
+//    public String getPizzaType() {
+//        return pizzaType;
+//    }
+//
+//    public Customer getCustomer() {
+//        return customer;
+//    }
+//
+//    public boolean getAdditionalTopping() {
+//        return additionalTopping;
+//    }
+//}
+//
+//class Doordelivery extends Pizzaservice{
+//    private double deliveryCharge;
+//    private double distanceInKms;
+//
+//    public Doordelivery(Customer customer, String pizzaType,
+//                        boolean additionalTopping, double distanceInKms) {
+//        super(customer, pizzaType,additionalTopping);
+//        this.distanceInKms = distanceInKms;
+//    }
+//
+//    boolean validateDistanceInKms(){
+//        return (distanceInKms >=1 && distanceInKms<= 10);
+//    }
+//
+//    @Override
+//    void calculatePizzaCost(){
+//        if(validateDistanceInKms()){
+//            super.calculatePizzaCost();
+//            if (super.pizzaCost != -1){
+//                pizzaCost += distanceInKms * (distanceInKms <=5? 5:7);
+//
+//            }
+//
+//        }
+//
+//    }
+//
+//    public double getDistanceInKms() {
+//        return distanceInKms;
+//    }
+//
+//    public double getDeliveryCharge() {
+//        return deliveryCharge;
+//    }
+//}
 
 
 //class Assignment29{
