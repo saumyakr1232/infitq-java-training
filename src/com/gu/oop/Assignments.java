@@ -11,6 +11,192 @@ public class Assignments {
     }
 }
 
+class Assignment32{
+    public static void main(String[] args) {
+        Graduate graduate = new Graduate("B", "Saumya", 5000, "Bachelors", 4.6);
+        double salary = graduate.calculateGrossSalary();
+
+        System.out.println(graduate);
+        System.out.println("Salary : "+ salary);
+        System.out.println("----------------------------------");
+
+        Lateral lateral = new Lateral("F", "Saurabh", 7000, "Masters", "AGPT");
+        salary = lateral.calculateGrossSalary();
+
+        System.out.println(lateral);
+        System.out.println("Salary : "+ salary);
+
+
+
+    }
+}
+
+abstract class Employee{
+    private String jobBand;
+    private String employeeName;
+    private double basic_salary;
+    private String qualification;
+
+
+    public Employee(String jobBand, String employeeName, double basic_salary, String qualification) {
+        this.jobBand = jobBand;
+        this.employeeName = employeeName;
+        this.basic_salary = basic_salary;
+        this.qualification = qualification;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "jobBand='" + jobBand + '\'' + "\n"+
+                " employeeName='" + employeeName + '\'' +"\n"+
+                " basic_salary=" + basic_salary +"\n"+
+                " qualification='" + qualification + '\'' +"\n"
+                ;
+    }
+
+    public String getJobBand() {
+        return jobBand;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public double getBasic_salary() {
+        return basic_salary;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    abstract public boolean validateJobBand();
+    abstract public double calculateGrossSalary();
+
+    public boolean validateBasicSalary(){
+        return basic_salary > 3000;
+    }
+
+    public boolean validateQualification(){
+        return qualification.equals("Masters") || qualification.equals("Bachelors");
+    }
+}
+
+class Graduate extends Employee{
+    private double cgpa;
+
+    public Graduate(String jobBand, String employeeName, double basic_salary, String qualification, double cgpa) {
+        super(jobBand, employeeName, basic_salary, qualification);
+        this.cgpa = cgpa;
+    }
+
+    @Override
+    public String toString() {
+
+        return super.toString() +
+                " cgpa=" + cgpa + "\n"+
+                '}';
+    }
+
+    public double getCgpa() {
+        return cgpa;
+    }
+
+    @Override
+    public boolean validateJobBand() {
+        return getJobBand().equals("A") || getJobBand().equals("B") || getJobBand().equals("C");
+    }
+
+    @Override
+    public double calculateGrossSalary() {
+        if(validateBasicSalary() && validateQualification() && validateJobBand()){
+            double grossSalary  = getBasic_salary() * 1.12; //basic + pf
+            int tpiAmount = 0;
+            if (cgpa >= 4 && cgpa <= 4.25){
+                tpiAmount = 100;
+            }else if(cgpa>=4.26 && cgpa <=4.5 ){
+                tpiAmount = 1700;
+            }else if(cgpa>=4.51 && cgpa <=4.75){
+                tpiAmount = 3200;
+            }else if(cgpa>=4.76 && cgpa <=5){
+                tpiAmount = 5000;
+            }else{
+                tpiAmount = -1;
+            }
+            grossSalary += tpiAmount; //tpi Amount
+            int incentive = switch (getJobBand()) {
+                case "A" -> 4;
+                case "B" -> 6;
+                case "C" -> 10;
+                default -> 0;
+            };
+
+            grossSalary += getBasic_salary()* (1 + incentive/100.0);
+
+            return grossSalary;
+
+
+        }
+        return -1.0;
+    }
+
+
+
+
+}
+
+class Lateral extends Employee{
+    private String skillSet;
+
+    public Lateral(String jobBand, String employeeName, double basic_salary, String qualification, String skillSet) {
+        super(jobBand, employeeName, basic_salary, qualification);
+        this.skillSet = skillSet;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " skillSet='" + skillSet + "'\n" +
+                '}';
+    }
+
+    @Override
+    public boolean validateJobBand() {
+        // bad code but who cares
+        return new ArrayList<String>(Arrays.asList("D", "E", "F")).contains(getJobBand());
+    }
+
+    @Override
+    public double calculateGrossSalary() {
+        if(validateBasicSalary() && validateQualification() && validateJobBand()){
+            double grossSalary = getBasic_salary() * 1.12; // basic + pf
+            int SMEBonus = switch (skillSet){
+                case "AGP" -> 6500;
+                case "AGPT" -> 8200;
+                case "AGDEV" -> 11500;
+                default -> 0;
+            };
+
+            grossSalary += SMEBonus;
+            int incentive = switch (getJobBand()){
+                case "D" -> 13;
+                case "E" -> 16;
+                case "F" -> 20;
+                default -> 0;
+            };
+
+            grossSalary += getBasic_salary()* (1 + incentive/100.0);
+        }
+        return -1;
+    }
+
+    public String getSkillSet() {
+        return skillSet;
+    }
+
+
+
+}
 
 //class Assignment31{
 //    public static void main(String[] args) {
