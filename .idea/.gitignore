@@ -2,6 +2,7 @@
 /shelf/
 **/out
 /workspace.xml
+../out/
 # Datasource local storage ignored files
 /../../../../../../:\Users\saumyakr1232\IdeaProjects\Infytq\.idea/dataSources/
 /dataSources.local.xml
